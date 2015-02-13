@@ -6,91 +6,110 @@
 
 <?php
 ini_set('display_errors', 'On');
-include 'storedInfo.php';
+require('connect.php');
 
-$mysqli = new mysqli("oniddb.cws.oregonstate.edu","pereiraa-db",$myPassword,"pereiraa-db");
-if(!$mysqli || $mysqli->connect_errno) {
-	echo "Connection error " .$mysqli->connect_errno." ".$mysqli->connect_error;
-}
+if($_POST){
 
+	if(isset($_POST['videoName'])&&!empty($_POST['videoName'])){
+		$video = $_POST['videoName'];
+		$cat = $_POST['videoCat'];
+		$len = $_POST['videoLength'];
 
-$video = $_POST['videoName'];
-$cat = $_POST['videoCat'];
-$len = $_POST['videoLength'];
+		if (!($stmt = $mysqli->prepare("INSERT INTO Videos(name, category, length) VALUES (?,?,?)"))) {
+			echo "Prepare failed: (" . $mysqli->errno . ") " . $mysqli->error;
+		}
+		if (!$stmt->bind_param("ssi", $video, $cat, $len)) {
+			echo "Binding parameters failed: (" . $stmt->errno . ") " . $stmt->error;
+		}
+		if (!$stmt->execute()) {
+			echo "Execute failed: (" . $stmt->errno . ") " . $stmt->error;
+		}
 
-if(!get_magic_quotes_gpc()) {
-	$video = addslashes($video);
-	$cat = addslashes($cat);
-	$len = addslashes($len);
-}
-//echo $video;
-//echo $cat;
-//echo $len;
-
-if(isset($_POST['videoName'])&&!empty($_POST['videoName'])){
-	if(!$mysqli->query("INSERT INTO Videos(name, category, length) VALUES ('".$video."', '".$cat."', '".$len."')")) {
-		echo "Insert failed: (".$mysqli->errno.")".$mysqli->error;
+		$stmt->close();
 	}
+
+	else 
+		echo "You didn't enter a Movie Name. This is required. Please go back and try again  ";
 }
-else 
-	echo "You didn't enter a Movie Name. This is required. Please go back and try again";
+
 
 $query = "SELECT * FROM Videos";
 $result = $mysqli->query($query);
 $num_results = $result->num_rows;
 echo "Number of videos found: ".$num_results."</p>";
 
+echo "Current Inventory";
 echo "<table border = '1'><br />";
 echo "<tr>";
 echo "<td>Name</td>";
 echo "<td>Category</td>";
 echo "<td>Length</td>";
-echo "<td>Checked Out</td>";
+echo "<td>Checked Out/Available</td>";
 
 for($i=0; $i<$num_results; $i++) {
+	
 	echo "<tr>";
 	$row = $result->fetch_assoc();
+	$uniqueId = $row['id'];
 	echo "<td>";
 	echo $row["name"];
+	?>
+	<form method = "post" action = "http://web.engr.oregonstate.edu/~pereiraa/delete.php">
+    <input type = "hidden" name = "rent" value ="<?php print $uniqueId;?>">
+    <input type = "submit" value = "Check In/Out">
+	</form>
+
+	<?php
 	echo "</td><td>";
 	echo $row['category'];
 	echo "</td><td>";
 	echo $row['length'];
 	echo "</td><td>";
-	echo $row['rented'];
+	if($row['rented']==1)
+		echo "Checked out";
+	else
+		echo "Available";
 	echo "</td><td>";
-	echo '<input type ="submit" value = "Delete"></td></tr>';
 	
+	?>
+    <form method = "post" action = "http://web.engr.oregonstate.edu/~pereiraa/delete.php">
+    <input type = "hidden" name = "indexKey" value ="<?php print $uniqueId;?>">
+    <input type = "submit" value = "Delete">
+	</form>
+    
+    <?php 
 
+	echo "</td></tr>";
 }
+
 echo "</table>";
 
-//while ($row = $result->fetch_assoc()) {
-  //      printf ("%s %s %d %d\n", $row["name"], $row["category"], $row["length"], $row["rented"]);
-    //}
-/*
-if(!($stmt = $mysqli->prepare("SELECT name, category, length, rented FROM Videos"))) {
-	echo "Prepare failed: (" .$mysqli->erno. ")" .$mysqli->error;
+echo "<br>Click";
+echo '<a href = "http://web.engr.oregonstate.edu/~pereiraa/Inventory.php"> here</a>';
+echo  " to add more videos.<br />";
+
+?>
+<form method = "post" action = "http://web.engr.oregonstate.edu/~pereiraa/delete.php">
+<input type = "hidden" name = "Clear">
+<input type = "submit" value = "Delete All Videos">
+</form>
+    
+<?php 
+
+$newQuery = "SELECT DISTINCT category FROM Videos";
+$newResult = $mysqli->query($newQuery);
+$newNum_results = $newResult->num_rows;
+echo "Number of Categories found: ".$newNum_results."</p>";
+
+for($j=0; $j<$newNum_results; $j++) {
+
+	$select = $newResult->fetch_assoc();
+	echo $select['category'];
 }
 
-if(!($stmt->executer()) {
-	echo "Ececute failed: (" .$mysqli->erno. ")" .$mysqli->error;
-}
 
 
-$out_name = NULL;
-$out_category = NULL;
-$out_length = NULL;
-$out_rented;
 
-if(!$stmt->bind_result($out_name, $out_category, $out_length, $out_rented)) {
-	echo "Binding output paremeters failed:(" .$mysqli->erno. ")" .$mysqli->error;
-}
 
-while($stmt->fetch()) {
-	printf("name = %s, category = %s, length = %d, available = %d</br>",$out_name, $out_category, $out_length, $out_rented));
-	echo "working";
-}
-*/
 ?>
 </body>
