@@ -14,6 +14,10 @@ if($_POST){
 		$video = $_POST['videoName'];
 		$cat = $_POST['videoCat'];
 		$len = $_POST['videoLength'];
+		if(!is_numeric($len)&&!empty($len)) {
+			echo "You must enter a number into this field <br>";
+		}
+		else {
 
 		if (!($stmt = $mysqli->prepare("INSERT INTO Videos(name, category, length) VALUES (?,?,?)"))) {
 			echo "Prepare failed: (" . $mysqli->errno . ") " . $mysqli->error;
@@ -26,6 +30,7 @@ if($_POST){
 		}
 
 		$stmt->close();
+	}
 	}
 
 	else 
@@ -99,13 +104,19 @@ echo  " to add more videos.<br />";
 $newQuery = "SELECT DISTINCT category FROM Videos";
 $newResult = $mysqli->query($newQuery);
 $newNum_results = $newResult->num_rows;
-echo "Number of Categories found: ".$newNum_results."</p>";
+
+echo "<select name = 'category'>";
+echo "<option value = 'All Movies' selected>All Movies</option>";
 
 for($j=0; $j<$newNum_results; $j++) {
 
 	$select = $newResult->fetch_assoc();
-	echo $select['category'];
+	//echo $select['category'];
+	if(!empty($select['category']))
+		echo "<option value = ''>".$select['category']."</option>";
+
 }
+echo "</select>";
 
 
 
