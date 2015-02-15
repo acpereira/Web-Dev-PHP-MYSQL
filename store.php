@@ -14,11 +14,6 @@ if($_POST){
 		$video = $_POST['videoName'];
 		$cat = $_POST['videoCat'];
 		$len = $_POST['videoLength'];
-		if(!is_numeric($len)&&!empty($len)) {
-			echo "You must enter a number into this field <br>";
-		}
-		else {
-
 		if (!($stmt = $mysqli->prepare("INSERT INTO Videos(name, category, length) VALUES (?,?,?)"))) {
 			echo "Prepare failed: (" . $mysqli->errno . ") " . $mysqli->error;
 		}
@@ -30,18 +25,65 @@ if($_POST){
 		}
 
 		$stmt->close();
-	}
+		
 	}
 
 	else 
-		echo "You didn't enter a Movie Name. This is required. Please go back and try again  ";
+		echo "You didn't enter a Movie Name. This is required. Please go back and try again. ";
 }
 
+echo "Welcome to the Inventory Tracker!</p>";
 
-$query = "SELECT * FROM Videos";
+echo "Click";
+echo '<a href = "http://web.engr.oregonstate.edu/~pereiraa/Inventory.php"> here</a>';
+echo  " to add videos.</p>";
+
+
+$newQuery = "SELECT DISTINCT category FROM Videos";
+$newResult = $mysqli->query($newQuery);
+$newNum_results = $newResult->num_rows;
+
+echo "Please choose your movie category:";
+
+?>
+
+<form method = "get" action = "">
+<select name = "cat">
+
+<?php
+
+echo "<option value = 'All Movies'>All Movies </option>";//" selected>All Movies</option>";
+for($j=0; $j<$newNum_results; $j++) {
+
+	$select = $newResult->fetch_assoc();
+	if(!empty($select['category']))
+		echo "<option value = ".$select['category'].">".$select['category']."</option>";
+}
+
+?>
+</select>
+<input type = "submit" name = "formSubmit" value = "Filter">
+</form>
+
+<?php
+
+
+if(isset($_GET['cat'])&&!empty($_GET['cat'])){
+ 	$id = $_GET['cat'];
+    echo "The selected category was ";
+ 	$newId =  json_encode($id);
+ 	echo $newId;
+ 	if($id == 'All Movies')
+		$query = "SELECT * FROM Videos";   
+	else  
+		$query = "SELECT * FROM Videos WHERE category = $newId";
+}
+else
+	$query = "SELECT * FROM Videos";   
+
 $result = $mysqli->query($query);
 $num_results = $result->num_rows;
-echo "Number of videos found: ".$num_results."</p>";
+echo "<br/>Number of videos found: ".$num_results."</p>";
 
 echo "Current Inventory";
 echo "<table border = '1'><br />";
@@ -52,6 +94,7 @@ echo "<td>Length</td>";
 echo "<td>Checked Out/Available</td>";
 
 for($i=0; $i<$num_results; $i++) {
+	//while($row = mysqli_fetch_array($result)){
 	
 	echo "<tr>";
 	$row = $result->fetch_assoc();
@@ -89,38 +132,11 @@ for($i=0; $i<$num_results; $i++) {
 
 echo "</table>";
 
-echo "<br>Click";
-echo '<a href = "http://web.engr.oregonstate.edu/~pereiraa/Inventory.php"> here</a>';
-echo  " to add more videos.<br />";
-
 ?>
 <form method = "post" action = "http://web.engr.oregonstate.edu/~pereiraa/delete.php">
 <input type = "hidden" name = "Clear">
 <input type = "submit" value = "Delete All Videos">
+
+
 </form>
-    
-<?php 
-
-$newQuery = "SELECT DISTINCT category FROM Videos";
-$newResult = $mysqli->query($newQuery);
-$newNum_results = $newResult->num_rows;
-
-echo "<select name = 'category'>";
-echo "<option value = 'All Movies' selected>All Movies</option>";
-
-for($j=0; $j<$newNum_results; $j++) {
-
-	$select = $newResult->fetch_assoc();
-	//echo $select['category'];
-	if(!empty($select['category']))
-		echo "<option value = ''>".$select['category']."</option>";
-
-}
-echo "</select>";
-
-
-
-
-
-?>
 </body>
