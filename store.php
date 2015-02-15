@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html>
 <head>
 	<title>Video Store</title>
@@ -32,9 +33,9 @@ if($_POST){
 		echo "You didn't enter a Movie Name. This is required. Please go back and try again. ";
 }
 
-echo "Welcome to the Inventory Tracker!</p>";
+echo "<p>Welcome to the Inventory Tracker!</p>";
 
-echo "Click";
+echo "<p>Click";
 echo '<a href = "http://web.engr.oregonstate.edu/~pereiraa/Inventory.php"> here</a>';
 echo  " to add videos.</p>";
 
@@ -47,7 +48,7 @@ echo "Please choose your movie category:";
 
 ?>
 
-<form method = "get" action = "">
+<form method = "get" action = "http://web.engr.oregonstate.edu/~pereiraa/store.php">
 <select name = "cat">
 
 <?php
@@ -83,10 +84,10 @@ else
 
 $result = $mysqli->query($query);
 $num_results = $result->num_rows;
-echo "<br/>Number of videos found: ".$num_results."</p>";
+echo "<p>Number of videos found: ".$num_results."</p>";
 
 echo "Current Inventory";
-echo "<table border = '1'><br />";
+echo "<table border = '1'>";
 echo "<tr>";
 echo "<td>Name</td>";
 echo "<td>Category</td>";
