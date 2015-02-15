@@ -1,0 +1,39 @@
+Start: Wed, 11 Feb 2015 20:00 -0500
+End: Wed, 11 Feb 2015 23:07:22 -0500 
+Tasks: Spent 3 hours working on the add procedure and the table showing videos.
+
+Start: Wed, 11 Feb 2015 20:00 -0500
+End: Wed, 11 Feb 2015 23:06:49 -0500 
+Tasks: 3 hours setting up the main page and the add procedure.
+
+Start: Fri, 13 Feb 2015 12:45 -0500
+End: Fri, 13 Feb 2015 16:56:42 -0500 
+Tasks: Created separate file to connect to database
+
+Start: Fri, 13 Feb 2015 12:45 -0500
+End: Fri, 13 Feb 2015 16:56:19 -0500 
+Tasks: Spent about 4 hours on buttons delete, checkin, delete all
+
+Start: Fri, 13 Feb 2015 12:45 -0500
+End: Fri, 13 Feb 2015 16:55:18 -0500 
+Tasks: Spent about 4 hours on buttons, delete, checkin, delete all
+
+Start: Fri, 13 Feb 2015 21:00 -0500 
+End: Fri, 13 Feb 2015 21:16:07 -0500 
+Tasks: Fixed check in toggle (15 minutes)
+
+Start: Fri, 13 Feb 2015 20:15 -0500 
+End: Fri, 13 Feb 2015 21:15:42 -0500 
+Tasks: Got dropdown menu set up (45 min) Still need to add functionality
+
+Start: Sun, 15 Feb 2015 09:00 -0500
+End: Sun, 15 Feb 2015 11:17:58 -0500 
+Tasks: Spent 2 hours working on the selection drown down and filter
+
+Start: Sun, 15 Feb 2015 11:17
+End: Sun, 15 Feb 2015 11:17:00 -0500 
+Tasks: Database connection info. No changes
+
+Start: Sun, 15 Feb 2015 11:16
+End: Sun, 15 Feb 2015 11:16:40 -0500 
+Tasks: Updated num field to make sure number validation took place.
